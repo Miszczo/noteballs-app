@@ -1,0 +1,8 @@
+[*.vue]
+html.format.wrapAttributes = "force-expand-multiline",
+explorer.compactFolders = false,
+workbench.editor.splitInGroupLayout = "vertical",
+html.format.wrapLineLength = 100
+
+[*.html]
+html.format.wrapAttributes = "force-expand-multiline"
