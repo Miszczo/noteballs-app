@@ -26,31 +26,12 @@
         </div>
 
 
-        <div
-            class="card mb-5"
+        <Note
             v-for="note in notes"
             :key="note.id"
-        >
-            <div class="card-content">
-                <div class="content">
-                    {{ note.content }}
-                </div>
-            </div>
-            <footer class="card-footer">
-                <a
-                    href="#"
-                    class="card-footer-item"
-                >
-                    Edit
-                </a>
-                <a
-                    href="#"
-                    class="card-footer-item"
-                >
-                    Delete
-                </a>
-            </footer>
-        </div>
+            :note="note"
+        />
+
     </div>
     {{ newNote }}
 </template>
@@ -62,6 +43,7 @@
 
 import { ref } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
+import Note from '@/components/Notes/Note.vue'
 
 /**
  * notes
