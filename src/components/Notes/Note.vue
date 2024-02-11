@@ -10,14 +10,15 @@
         </div>
         <footer class="card-footer">
             <a
-                href="#"
                 class="card-footer-item"
+                role="button"
             >
                 Edit
             </a>
             <a
-                href="#"
+                @click.prevent="handleDeleteClicked"
                 class="card-footer-item"
+                role="button"
             >
                 Delete
             </a>
@@ -43,6 +44,12 @@ const props = defineProps({
 })
 
 /**
+ * emits
+ */
+
+const emit = defineEmits(["deleteNote", "editNote"]);
+
+/**
  * computed
  */
 
@@ -52,4 +59,11 @@ const noteLength = computed(() => {
 
     return `${length} ${description}`;
 })
+
+/**
+ * handle delete clicked
+ */
+const handleDeleteClicked = () => {
+    emit("deleteNote");
+}
 </script>
