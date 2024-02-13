@@ -1,40 +1,27 @@
 <template>
     <div class="notes">
 
-        <div class="card has-background-success-dark p-4 mb-5">
-            <div class="field">
-                <div class="control">
-                    <textarea
-                        v-model="newNote"
-                        class="textarea"
-                        placeholder="Add a new note"
-                        ref="newNoteRef"
-                    />
-                </div>
-            </div>
-            <div class="field is-grouped is-grouped-right">
-                <div class="control">
-                    <button
-                        @click="addNote"
-                        :disabled="!newNote"
-                        class="button is-link has-background-success"
-                    >
-                        Add New Note
-                    </button>
-                </div>
-            </div>
-        </div>
-
+        <AddEditNote
+            v-model="newNote"
+            ref="addEditNoteRef"
+        >
+            <template #buttons>
+                <button
+                    @click="addNote"
+                    :disabled="!newNote"
+                    class="button is-link has-background-success"
+                >
+                    Add New Note
+                </button>
+            </template>
+        </AddEditNote>
 
         <Note
-            v-for="note in notes"
+            v-for="note in storeNotes.notes"
             :key="note.id"
             :note="note"
-            @deleteNote="deleteNote(note.id)"
         />
-
     </div>
-    {{ newNote }}
 </template>
 
 <script setup>
@@ -45,39 +32,30 @@
 import { ref } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import Note from '@/components/Notes/Note.vue'
+import AddEditNote from '@/components/Notes/AddEditNote.vue'
+import { useStoreNotes } from '@/stores/storeNotes';
+
+/**
+ * store
+ */
+
+const storeNotes = useStoreNotes();
 
 /**
  * notes
  */
 
 const newNote = ref(''),
-    notes = ref([
-        {
-            id: 'id1',
-            content: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio voluptas vitae porro praesentium earum, corporis corrupti, cum blanditiis laudantium molestias adipisci, saepe deleniti esse assumenda? Commodi dolorem quisquam ad eius.'
-        },
-        {
-            id: 'id2',
-            content: 'ium earum, corporis corrupti, cum blanditiis laudantium molestias adipisci, saepe deleniti esse assumenda?'
-        }
-    ]),
-    newNoteRef = ref(null);
+    addEditNoteRef = ref(null);
 
 /**
  * methods
  */
 
 const addNote = () => {
-    let note = {
-        id: uuidv4(),
-        content: newNote.value,
-    }
-    notes.value.unshift(note);
+    storeNotes.addNote(newNote.value);
     newNote.value = '';
-    newNoteRef.value.focus();
+    addEditNoteRef.value.focusTextarea();
 }
 
-const deleteNote = id => {
-    notes.value = notes.value.filter(note => note.id != id)
-}
 </script>
