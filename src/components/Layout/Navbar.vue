@@ -26,7 +26,6 @@
             </div>
 
             <div
-                @click="showMobileNav = !showMobileNav"
                 class="navbar-menu"
                 :class="{ 'is-active': showMobileNav }"
                 id="navbarBasicExample"
@@ -63,12 +62,20 @@ import { ref } from 'vue';
  */
 
 const showMobileNav = ref(false)
+
+document.addEventListener("click", (event) => {
+    if (!event.target.className == "navbar-burger" || !event.target.closest(".navbar-burger")) {
+        showMobileNav.value = false;
+    }
+});
 </script>
 
-<style>@media (max-width: 1023px) {
+<style>
+@media (max-width: 1023px) {
     .navbar-menu {
         position: absolute;
         left: 0;
         width: 100%;
     }
-}</style>
+}
+</style>
