@@ -29,11 +29,12 @@
  * imports
  */
 
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
 import Note from '@/components/Notes/Note.vue'
 import AddEditNote from '@/components/Notes/AddEditNote.vue'
 import { useStoreNotes } from '@/stores/storeNotes';
+import { useWatchCharacters } from '@/use/useWatchCharacters.js'
 
 /**
  * store
@@ -45,8 +46,7 @@ const storeNotes = useStoreNotes();
  * notes
  */
 
-const newNote = ref(''),
-    addEditNoteRef = ref(null);
+const newNote = ref('');
 
 /**
  * methods
@@ -55,7 +55,8 @@ const newNote = ref(''),
 const addNote = () => {
     storeNotes.addNote(newNote.value);
     newNote.value = '';
-    addEditNoteRef.value.focusTextarea();
 }
+
+useWatchCharacters(newNote)
 
 </script>

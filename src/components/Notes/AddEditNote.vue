@@ -7,7 +7,7 @@
             v-if="props.label"
             class="label has-text-white"
         >
-           {{ props.label }}
+            {{ props.label }}
         </label>
         <div class="field">
             <div class="control">
@@ -15,7 +15,8 @@
                     v-model="model"
                     class="textarea"
                     :placeholder="textareaPlaceholder"
-                    ref="textareaRef"
+                    v-autofocus
+                    maxlength="100"
                 />
             </div>
         </div>
@@ -33,6 +34,7 @@
  */
 
 import { ref } from 'vue';
+import { vAutofocus } from '@/directives/vAutofocus'
 
 /**
  * props
@@ -56,18 +58,6 @@ const props = defineProps({
  *  variables 
  */
 
-const model = defineModel(),
-    textareaRef = ref(null);
+const model = defineModel();
 
-/**
- * methods
- */
-
-const focusTextarea = () => {
-    textareaRef.value.focus();
-}
-
-defineExpose({
-    focusTextarea
-})
 </script>

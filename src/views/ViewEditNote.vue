@@ -5,7 +5,6 @@
             bg-color="link"
             textareaPlaceholder="Edit note"
             label="Edit Note"
-            ref="addEditNoteRef"
         >
             <template #buttons>
                 <RouterLink
@@ -34,6 +33,7 @@ import { ref } from 'vue'
 import AddEditNote from '@/components/Notes/AddEditNote.vue';
 import { useStoreNotes } from '@/stores/storeNotes';
 import { useRoute, useRouter } from 'vue-router';
+
 
 /**
  * store
