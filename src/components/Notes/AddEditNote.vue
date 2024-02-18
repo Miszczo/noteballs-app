@@ -33,8 +33,8 @@
  * imports
  */
 
-import { ref } from 'vue';
-import { vAutofocus } from '@/directives/vAutofocus'
+import { vAutofocus } from '@/directives/vAutofocus';
+import { useWatchCharacters } from '@/use/useWatchCharacters.js';
 
 /**
  * props
@@ -59,5 +59,5 @@ const props = defineProps({
  */
 
 const model = defineModel();
-
+useWatchCharacters(model);
 </script>

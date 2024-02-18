@@ -9,7 +9,7 @@
             <template #buttons>
                 <RouterLink
                     to="/"
-                    class="button is-link is-light"
+                    class="button is-link is-light mr-2"
                 >
                     Cancel
                 </RouterLink>
@@ -29,11 +29,11 @@
 /**
  * imports
  */
+
 import { ref } from 'vue'
 import AddEditNote from '@/components/Notes/AddEditNote.vue';
 import { useStoreNotes } from '@/stores/storeNotes';
 import { useRoute, useRouter } from 'vue-router';
-
 
 /**
  * store
@@ -45,16 +45,18 @@ const storeNotes = useStoreNotes();
  * notes
  */
 
-const route = useRoute();
-const router = useRouter();
-
-const noteContent = ref('');
+const route = useRoute(),
+    router = useRouter(),
+    noteContent = ref('');
 
 noteContent.value = storeNotes.getNoteContent(route.params.id);
+
+/**
+ * methods
+ */
 
 const handleSaveClicked = () => {
     storeNotes.updateNote(route.params.id, noteContent.value);
     router.push('/');
 }
-
 </script>

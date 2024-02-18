@@ -4,7 +4,10 @@
         role="navigation"
         aria-label="main navigation"
     >
-        <div class="container is-max-desktop px-2">
+        <div
+            ref="navbarMenuRef"
+            class="container is-max-desktop px-2"
+        >
             <div class="navbar-brand">
                 <div class="navbar-item is-size-4 is-family-monospace">
                     Noteballs
@@ -14,6 +17,7 @@
                     @click.prevent="showMobileNav = !showMobileNav"
                     class="navbar-burger"
                     :class="{ 'is-active': showMobileNav }"
+                    ref="navbarBurgerRef"
                     role="button"
                     aria-label="menu"
                     aria-expanded="false"
@@ -55,18 +59,22 @@
 /**
  * Imports
  */
+
 import { ref } from 'vue';
+import { onClickOutside } from '@vueuse/core'
 
 /**
  * Mobile nav
  */
 
-const showMobileNav = ref(false)
+const showMobileNav = ref(false),
+    navbarMenuRef = ref(null),
+    navbarBurgerRef = ref(null);
 
-document.addEventListener("click", (event) => {
-    if (!event.target.className == "navbar-burger" || !event.target.closest(".navbar-burger")) {
-        showMobileNav.value = false;
-    }
+onClickOutside(navbarMenuRef, () => {
+    showMobileNav.value = false;
+}, {
+    ignore: [navbarBurgerRef]
 });
 </script>
 
