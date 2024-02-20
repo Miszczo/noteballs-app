@@ -1,53 +1,54 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
+import { db } from '@/js/firebase';
 
 export const useStoreNotes = defineStore('storeNotes', {
-    state: () => (
-        {
-            notes: [
-                {
-                    id: 'id1',
-                    content: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio voluptas vitae porro praesentium earum, corporis corrupti, cum blanditiis laudantium molestias adipisci, saepe deleniti esse assumenda? Commodi dolorem quisquam ad eius.'
-                },
-                {
-                    id: 'id2',
-                    content: 'ium earum, corporis corrupti, cum blanditiis laudantium molestias adipisci, saepe deleniti esse assumenda?'
-                }
-            ]
-        }
-    ),
+    state: () => ({
+        notes: [
+            {
+                id: 'id1',
+                content:
+                    'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio voluptas vitae porro praesentium earum, corporis corrupti, cum blanditiis laudantium molestias adipisci, saepe deleniti esse assumenda? Commodi dolorem quisquam ad eius.',
+            },
+            {
+                id: 'id2',
+                content:
+                    'ium earum, corporis corrupti, cum blanditiis laudantium molestias adipisci, saepe deleniti esse assumenda?',
+            },
+        ],
+    }),
     actions: {
         addNote(noteDescription) {
             let note = {
                 id: uuidv4(),
                 content: noteDescription,
-            }
-            this.notes.unshift(note)
+            };
+            this.notes.unshift(note);
         },
 
         updateNote(id, description) {
-            this.notes.find(note => note.id == id).content = description;
+            this.notes.find((note) => note.id == id).content = description;
         },
 
         deleteNote(id) {
-            this.notes = this.notes.filter(note => note.id != id)
-        }
+            this.notes = this.notes.filter((note) => note.id != id);
+        },
     },
     getters: {
         getNoteContent: (state) => {
             return (id) => {
-                return state.notes.filter(note => note.id == id)[0].content;
-            }
+                return state.notes.filter((note) => note.id == id)[0].content;
+            };
         },
         totalNotesCount: (state) => {
             return state.notes.length;
         },
         totalCharactersCount: (state) => {
             let charactersTotalLength = 0;
-            state.notes.forEach(el => {
-                charactersTotalLength += (el.content.length);
+            state.notes.forEach((el) => {
+                charactersTotalLength += el.content.length;
             });
             return charactersTotalLength;
-        }
-    }
-})
+        },
+    },
+});
