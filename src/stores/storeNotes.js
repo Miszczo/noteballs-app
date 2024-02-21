@@ -1,35 +1,37 @@
 import { defineStore } from 'pinia';
-import { v4 as uuidv4 } from 'uuid';
+import { collection, onSnapshot, doc, setDoc } from 'firebase/firestore';
 import { db } from '@/js/firebase';
+
+const notesCollectionRef = collection(db, 'notes');
 
 export const useStoreNotes = defineStore('storeNotes', {
     state: () => ({
-        notes: [
-            {
-                id: 'id1',
-                content:
-                    'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Distinctio voluptas vitae porro praesentium earum, corporis corrupti, cum blanditiis laudantium molestias adipisci, saepe deleniti esse assumenda? Commodi dolorem quisquam ad eius.',
-            },
-            {
-                id: 'id2',
-                content:
-                    'ium earum, corporis corrupti, cum blanditiis laudantium molestias adipisci, saepe deleniti esse assumenda?',
-            },
-        ],
+        notes: [],
     }),
     actions: {
-        addNote(noteDescription) {
-            let note = {
-                id: uuidv4(),
-                content: noteDescription,
-            };
-            this.notes.unshift(note);
+        async getNotes() {
+            onSnapshot(notesCollectionRef, (querySnapshot) => {
+                let notes = [];
+                querySnapshot.forEach((doc) => {
+                    let note = {
+                        id: doc.id,
+                        content: doc.data().content,
+                    };
+                    notes.push(note);
+                });
+                this.notes = [...notes];
+            });
         },
+        async addNote(noteDescription) {
+            let id = new Date().getTime().toString();
 
+            await setDoc(doc(notesCollectionRef, id), {
+                content: noteDescription,
+            });
+        },
         updateNote(id, description) {
             this.notes.find((note) => note.id == id).content = description;
         },
-
         deleteNote(id) {
             this.notes = this.notes.filter((note) => note.id != id);
         },
