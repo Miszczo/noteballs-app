@@ -16,13 +16,21 @@
             </template>
         </AddEditNote>
 
-        <Note
-            v-for="note in storeNotes.notes"
-            :key="note.id"
-            :note="note"
+        <progress
+            v-if="!storeNotes.notesLoaded"
+            class="progress is-medium is-success"
+            max="100"
         />
-    </div>
-</template>
+
+        <template v-else>
+            <Note
+                v-for="note in storeNotes.notes"
+                :key="note.id"
+                :note="note"
+            />
+        </template>
+
+</div></template>
 
 <script setup>
 /**

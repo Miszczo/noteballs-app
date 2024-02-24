@@ -1,39 +1,59 @@
 import { defineStore } from 'pinia';
-import { collection, onSnapshot, doc, setDoc } from 'firebase/firestore';
+import {
+    collection,
+    onSnapshot,
+    doc,
+    addDoc,
+    deleteDoc,
+    updateDoc,
+    query,
+    orderBy,
+} from 'firebase/firestore';
 import { db } from '@/js/firebase';
 
 const notesCollectionRef = collection(db, 'notes');
+const notesCollectionQuery = query(notesCollectionRef, orderBy('date', 'desc'));
 
 export const useStoreNotes = defineStore('storeNotes', {
     state: () => ({
         notes: [],
+        notesLoaded: false,
     }),
     actions: {
         async getNotes() {
-            onSnapshot(notesCollectionRef, (querySnapshot) => {
+            this.notesLoaded = false;
+            onSnapshot(notesCollectionQuery, (querySnapshot) => {
                 let notes = [];
                 querySnapshot.forEach((doc) => {
                     let note = {
                         id: doc.id,
                         content: doc.data().content,
+                        date: doc.data().date,
                     };
                     notes.push(note);
                 });
+
                 this.notes = [...notes];
+                this.notesLoaded = true;
             });
         },
         async addNote(noteDescription) {
-            let id = new Date().getTime().toString();
+            let date = new Date().getTime().toString();
 
-            await setDoc(doc(notesCollectionRef, id), {
+            await addDoc(notesCollectionRef, {
                 content: noteDescription,
+                date: date,
             });
         },
-        updateNote(id, description) {
-            this.notes.find((note) => note.id == id).content = description;
+        async updateNote(id, description) {
+            const washingtonRef = doc(notesCollectionRef, id);
+
+            await updateDoc(washingtonRef, {
+                content: description,
+            });
         },
-        deleteNote(id) {
-            this.notes = this.notes.filter((note) => note.id != id);
+        async deleteNote(id) {
+            await deleteDoc(doc(notesCollectionRef, id));
         },
     },
     getters: {
