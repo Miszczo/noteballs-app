@@ -6,6 +6,7 @@ import {
     signOut,
 } from 'firebase/auth';
 import { auth } from '@/js/firebase';
+import { useStoreNotes } from './storeNotes';
 
 export const useStoreAuth = defineStore('storeAuth', {
     state: () => ({
@@ -13,16 +14,17 @@ export const useStoreAuth = defineStore('storeAuth', {
     }),
     actions: {
         init() {
+            const storeNotes = useStoreNotes();
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     this.user.id = user.uid;
                     this.user.email = user.email;
                     this.router.push('/');
-                    console.log('user logged in', user);
+                    storeNotes.init();
                 } else {
                     this.user = {};
                     this.router.replace('/auth');
-                    console.log('user logged out', user);
+                    storeNotes.clearNotes();
                 }
             });
         },
@@ -54,8 +56,7 @@ export const useStoreAuth = defineStore('storeAuth', {
         },
         logoutUser() {
             signOut(auth)
-                .then(() => {
-                })
+                .then(() => {})
                 .catch((error) => {
                     console.log(error.message);
                 });
