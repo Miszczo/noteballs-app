@@ -28,16 +28,23 @@
                 :key="note.id"
                 :note="note"
             />
-        </template>
 
-</div></template>
+            <div
+                v-if="!storeNotes.notes.length"
+                class="is-size-4 has-text-centered has-text-grey-light is-family-monospace py-6"
+            >
+                No notes here yet...
+            </div>
+        </template>
+    </div>
+</template>
 
 <script setup>
 /**
  * imports
  */
 
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Note from '@/components/Notes/Note.vue';
 import AddEditNote from '@/components/Notes/AddEditNote.vue';
 import { useStoreNotes } from '@/stores/storeNotes';
@@ -62,4 +69,12 @@ const addNote = () => {
     storeNotes.addNote(newNote.value);
     newNote.value = '';
 }
+
+/**
+ * mounted
+ */
+
+onMounted(() => {
+    storeNotes.getNotes();
+})
 </script>

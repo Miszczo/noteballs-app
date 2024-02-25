@@ -3,29 +3,29 @@
  * Imports
  */
 import Navbar from '@/components/Layout/Navbar.vue';
-import { useStoreNotes } from '@/stores/storeNotes';
+import { useStoreAuth } from '@/stores/storeAuth';
 import { onMounted } from 'vue';
 
 /**
  * store
  */
 
-const storeNotes = useStoreNotes();
+const storeAuth = useStoreAuth();
 
 /**
  * mounted
  */
 
 onMounted(() => {
-  storeNotes.getNotes();
+    storeAuth.init();
 })
 </script>
 
 <template>
-  <Navbar />
-  <div class="container is-max-desktop px-2 py-4">
-    <RouterView />
-  </div>
+    <Navbar />
+    <div class="container is-max-desktop px-2 py-4">
+        <RouterView />
+    </div>
 </template>
 
 <style>
